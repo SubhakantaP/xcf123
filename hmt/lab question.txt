@@ -1,0 +1,66 @@
+#include <stdio.h>
+
+int knapsack(int N, int W[], int P[], int M) {
+    int dp[N + 1][M + 1];
+    for (int i = 0; i <= N; i++) {
+        for (int j = 0; j <= M; j++) {
+            if (i == 0 || j == 0) {
+                dp[i][j] = 0;
+            } else if (W[i - 1] <= j) {
+                dp[i][j] = (P[i - 1] + dp[i - 1][j - W[i - 1]] > dp[i - 1][j])
+                               ? P[i - 1] + dp[i - 1][j - W[i - 1]]
+                               : dp[i - 1][j];
+            } else {
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+    }
+    printf("\nResultant DP Table:\n");
+    for (int i = 0; i <= N; i++) {
+        for (int j = 0; j <= M; j++) {
+            printf("%4d", dp[i][j]);
+        }
+        printf("\n");
+    }
+    return dp[N][M];
+}
+
+int main() {
+    int N, M;
+    printf("Enter the number of objects (N): ");
+    scanf("%d", &N);
+
+    int W[N], P[N];
+
+    printf("Enter the weights of the objects:\n");
+    for (int i = 0; i < N; i++) {
+        printf("Weight of object %d: ", i + 1);
+        scanf("%d", &W[i]);
+    }
+
+    printf("Enter the profits of the objects:\n");
+    for (int i = 0; i < N; i++) {
+        printf("Profit of object %d: ", i + 1);
+        scanf("%d", &P[i]);
+    }
+
+    printf("Enter the capacity of the knapsack (M): ");
+    scanf("%d", &M);
+
+    printf("\nEntered Weights: ");
+    for (int i = 0; i < N; i++) {
+        printf("%d ", W[i]);
+    }
+
+    printf("\nEntered Profits: ");
+    for (int i = 0; i < N; i++) {
+        printf("%d ", P[i]);
+    }
+
+    printf("\nKnapsack Capacity (M): %d\n", M);
+
+    int maxProfit = knapsack(N, W, P, M);
+    printf("\nMaximum Profit Achieved: %d\n", maxProfit);
+
+    return 0;
+}
